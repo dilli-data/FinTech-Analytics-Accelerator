@@ -1,5 +1,7 @@
 # FinTech Analytics Accelerator
 
+Author: Dilliraja Sundar
+
 A comprehensive analytics solution built with dbt, Amazon Redshift, and Amazon QuickSight for financial institutions to gain insights from their banking data.
 
 ## 🎯 Use Cases
@@ -144,6 +146,7 @@ For detailed architecture documentation, see [Architecture.md](docs/architecture
    - dbt CLI
    - Access to an Amazon Redshift cluster
    - Amazon QuickSight account
+   - psql (PostgreSQL client) for Redshift connection
 
 2. **AWS Resources Required**
    - Amazon Redshift cluster
@@ -152,9 +155,9 @@ For detailed architecture documentation, see [Architecture.md](docs/architecture
    - Amazon QuickSight subscription
    - Appropriate IAM roles and permissions
 
-### Detailed Setup Instructions
+### Deployment Steps
 
-1. **Clone and Setup Project**
+1. **Initial Setup**
    ```bash
    # Clone the repository
    git clone [repository-url]
@@ -168,22 +171,66 @@ For detailed architecture documentation, see [Architecture.md](docs/architecture
    pip install -r requirements.txt
    ```
 
-2. **Configure Environment Variables**
+2. **AWS Configuration**
+   ```bash
+   # Configure AWS CLI
+   aws configure
+   # Enter your AWS Access Key ID
+   # Enter your AWS Secret Access Key
+   # Enter your default region (e.g., us-east-1)
+   # Enter your output format (json)
+   ```
+
+3. **Create Required AWS Resources**
+   ```bash
+   # Create S3 bucket
+   aws s3 mb s3://your-fintech-bucket-name
+   
+   # Upload Glue ETL script
+   aws s3 cp aws/glue/etl_job.py s3://your-fintech-bucket-name/glue/
+   
+   # Deploy CloudFormation stack
+   aws cloudformation deploy \
+     --template-file aws/cloudformation/glue-job.yaml \
+     --stack-name fintech-etl \
+     --parameter-overrides \
+       Environment=dev \
+       S3BucketName=your-fintech-bucket-name \
+       RedshiftClusterIdentifier=your-cluster-id
+   ```
+
+4. **Redshift Setup**
+   ```bash
+   # Connect to Redshift and run setup script
+   psql -h your-redshift-cluster.xxxxx.region.redshift.amazonaws.com \
+        -U admin \
+        -d fintech_db \
+        -f aws/redshift/setup.sql
+   
+   # Set up maintenance schedule (optional)
+   # Add to crontab:
+   0 0 * * * psql -h your-redshift-cluster.xxxxx.region.redshift.amazonaws.com \
+                  -U admin \
+                  -d fintech_db \
+                  -f aws/redshift/maintenance.sql
+   ```
+
+5. **Configure Environment Variables**
    ```bash
    # Copy the template file
    cp .env.template .env
    
    # Edit .env with your configuration
-   # Required variables:
-   # - REDSHIFT_HOST
-   # - REDSHIFT_USER
-   # - REDSHIFT_PASSWORD
-   # - REDSHIFT_DATABASE
-   # - AWS_PROFILE
-   # - AWS_REGION
+   REDSHIFT_HOST=your-redshift-cluster.xxxxx.region.redshift.amazonaws.com
+   REDSHIFT_USER=admin
+   REDSHIFT_PASSWORD=your-secure-password
+   REDSHIFT_DATABASE=fintech_db
+   AWS_PROFILE=default
+   AWS_REGION=us-east-1
+   S3_BUCKET=your-fintech-bucket-name
    ```
 
-3. **Setup dbt**
+6. **Setup dbt**
    ```bash
    # Install dbt dependencies
    cd dbt
@@ -195,54 +242,59 @@ For detailed architecture documentation, see [Architecture.md](docs/architecture
    dbt test  # Run tests
    ```
 
-4. **AWS Setup**
-   - Create an S3 bucket for data landing
-   - Set up AWS Glue ETL jobs
-   - Configure Redshift cluster
-   - Set up QuickSight
-
-5. **Project Structure**
+7. **Verify Deployment**
+   ```bash
+   # Check Glue job status
+   aws glue get-job --job-name fintech-etl-dev
+   
+   # Check Redshift tables
+   psql -h your-redshift-cluster.xxxxx.region.redshift.amazonaws.com \
+        -U admin \
+        -d fintech_db \
+        -c "\dt raw.*"
+   
+   # Check dbt models
+   dbt test
    ```
-   fintech-analytics-accelerator/
-   ├── dbt/
-   │   ├── models/
-   │   │   ├── staging/
-   │   │   ├── intermediate/
-   │   │   └── marts/
-   │   ├── tests/
-   │   ├── macros/
-   │   ├── seeds/
-   │   └── snapshots/
-   ├── docs/
-   ├── quicksight_assets/
-   ├── requirements.txt
-   ├── .env.template
-   └── README.md
-   ```
-
-6. **Development Workflow**
-   - Create new models in `dbt/models/`
-   - Add tests in `dbt/tests/`
-   - Update documentation in `docs/`
-   - Use `dbt run` to test changes
-   - Use `dbt test` to validate data quality
 
 ### Common Issues and Solutions
 
-1. **dbt Connection Issues**
-   - Verify Redshift credentials in `.env`
-   - Check network connectivity to Redshift
-   - Ensure IAM roles are properly configured
+1. **AWS Authentication Issues**
+   - Verify AWS credentials are properly configured
+   - Check IAM roles and permissions
+   - Ensure AWS CLI is properly installed and configured
 
-2. **AWS Authentication**
-   - Verify AWS CLI configuration
-   - Check IAM permissions
-   - Ensure AWS_PROFILE is set correctly
+2. **Redshift Connection Issues**
+   - Verify network connectivity to Redshift cluster
+   - Check security group settings
+   - Ensure correct credentials in .env file
 
-3. **Data Pipeline Issues**
-   - Check Glue job logs
+3. **Glue Job Failures**
+   - Check CloudWatch logs for error messages
    - Verify S3 bucket permissions
+   - Ensure Redshift connection is properly configured
+
+4. **dbt Model Errors**
+   - Check model SQL syntax
+   - Verify database permissions
+   - Review dbt logs for specific errors
+
+### Monitoring and Maintenance
+
+1. **Regular Maintenance**
+   - Run Redshift maintenance script daily
+   - Monitor CloudWatch metrics
+   - Check dbt test results
+
+2. **Performance Monitoring**
    - Monitor Redshift query performance
+   - Check Glue job execution times
+   - Review QuickSight dashboard load times
+
+3. **Security Updates**
+   - Regularly rotate credentials
+   - Update IAM policies as needed
+   - Monitor CloudTrail logs
 
 ## 📊 Analytics Dashboards
 
@@ -275,13 +327,3 @@ For detailed architecture documentation, see [Architecture.md](docs/architecture
 - Cached QuickSight datasets
 - Automated maintenance
 
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Submit a pull request
-
-## 📝 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.

@@ -1,0 +1,131 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'CloudFormation template for FinTech Analytics Glue ETL job'
+
+Parameters:
+  Environment:
+    Type: String
+    Default: dev
+    AllowedValues:
+      - dev
+      - prod
+    Description: Environment name
+
+  S3BucketName:
+    Type: String
+    Description: S3 bucket name for data landing
+
+  RedshiftClusterIdentifier:
+    Type: String
+    Description: Redshift cluster identifier
+
+  RedshiftDatabaseName:
+    Type: String
+    Default: fintech_db
+    Description: Redshift database name
+
+Resources:
+  GlueETLJob:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub fintech-etl-${Environment}
+      Role: !GetAtt GlueServiceRole.Arn
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub s3://${S3BucketName}/glue/etl_job.py
+      DefaultArguments:
+        '--job-language': 'python'
+        '--job-bookmark-option': 'job-bookmark-enable'
+        '--s3_bucket': !Ref S3BucketName
+        '--redshift_connection': !Ref RedshiftConnection
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      MaxRetries: 0
+      Timeout: 2880
+      NumberOfWorkers: 2
+      WorkerType: G.1X
+      GlueVersion: '3.0'
+
+  GlueServiceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: glue.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole
+      Policies:
+        - PolicyName: S3Access
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:PutObject
+                  - s3:DeleteObject
+                  - s3:ListBucket
+                Resource:
+                  - !Sub arn:aws:s3:::${S3BucketName}
+                  - !Sub arn:aws:s3:::${S3BucketName}/*
+        - PolicyName: RedshiftAccess
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - redshift:DescribeClusters
+                  - redshift:GetClusterCredentials
+                Resource: '*'
+
+  RedshiftConnection:
+    Type: AWS::Glue::Connection
+    Properties:
+      Name: !Sub fintech-redshift-${Environment}
+      ConnectionType: JDBC
+      PhysicalConnectionRequirements:
+        AvailabilityZone: !GetAtt RedshiftCluster.AvailabilityZone
+        SecurityGroupIdList: 
+          - !Ref RedshiftSecurityGroup
+        SubnetId: !Ref PrivateSubnet
+      ConnectionProperties:
+        JDBC_CONNECTION_URL: !Sub jdbc:redshift://${RedshiftCluster.Endpoint.Address}:${RedshiftCluster.Endpoint.Port}/${RedshiftDatabaseName}
+        USERNAME: !Ref RedshiftMasterUsername
+        PASSWORD: !Ref RedshiftMasterPassword
+
+  GlueCrawler:
+    Type: AWS::Glue::Crawler
+    Properties:
+      Name: !Sub fintech-crawler-${Environment}
+      Role: !GetAtt GlueServiceRole.Arn
+      DatabaseName: !Ref GlueDatabase
+      Schedule:
+        ScheduleExpression: cron(0 0 * * ? *)
+      Targets:
+        S3Targets:
+          - Path: !Sub s3://${S3BucketName}/raw/
+      SchemaChangePolicy:
+        UpdateBehavior: UPDATE_IN_DATABASE
+        DeleteBehavior: LOG
+
+  GlueDatabase:
+    Type: AWS::Glue::Database
+    Properties:
+      Name: !Sub fintech_${Environment}
+      Description: Database for FinTech Analytics
+
+Outputs:
+  GlueJobName:
+    Description: Name of the Glue ETL job
+    Value: !Ref GlueETLJob
+
+  GlueCrawlerName:
+    Description: Name of the Glue crawler
+    Value: !Ref GlueCrawler
+
+  GlueDatabaseName:
+    Description: Name of the Glue database
+    Value: !Ref GlueDatabase 
