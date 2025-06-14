@@ -1,0 +1,11 @@
+login_id,customer_id,login_timestamp,ip_address,device_id,device_type,browser,os,login_status,failure_reason,location_country,location_city
+LOG001,CUST001,2024-03-01 08:15:00,192.168.1.1,DEV001,mobile,Chrome,iOS,success,null,USA,New York
+LOG002,CUST002,2024-03-01 09:20:00,192.168.1.2,DEV002,desktop,Firefox,Windows,success,null,USA,Los Angeles
+LOG003,CUST003,2024-03-01 10:30:00,192.168.1.3,DEV003,tablet,Safari,iOS,failed,invalid_password,USA,Chicago
+LOG004,CUST001,2024-03-01 11:45:00,45.67.89.123,DEV004,mobile,Chrome,Android,success,null,Canada,Toronto
+LOG005,CUST004,2024-03-01 12:15:00,192.168.1.5,DEV005,desktop,Edge,Windows,success,null,USA,Miami
+LOG006,CUST002,2024-03-01 13:30:00,78.90.123.456,DEV006,mobile,Safari,iOS,failed,invalid_credentials,UK,London
+LOG007,CUST005,2024-03-01 14:45:00,192.168.1.7,DEV007,desktop,Chrome,MacOS,success,null,USA,Seattle
+LOG008,CUST003,2024-03-01 15:20:00,192.168.1.8,DEV008,tablet,Firefox,Android,failed,account_locked,USA,Chicago
+LOG009,CUST006,2024-03-01 16:30:00,192.168.1.9,DEV009,mobile,Chrome,Android,success,null,USA,Boston
+LOG010,CUST007,2024-03-01 17:45:00,192.168.1.10,DEV010,desktop,Safari,MacOS,success,null,USA,Denver 

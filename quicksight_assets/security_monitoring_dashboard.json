@@ -1,0 +1,117 @@
+{
+    "dashboard": {
+        "name": "Security Monitoring Dashboard",
+        "description": "Comprehensive security monitoring dashboard for fraud detection and risk assessment",
+        "sheets": [
+            {
+                "name": "Security Overview",
+                "visuals": [
+                    {
+                        "type": "KPIs",
+                        "title": "Security Risk Metrics",
+                        "metrics": [
+                            {
+                                "name": "Critical Risk Customers",
+                                "field": "security_risk_level",
+                                "filter": "Critical",
+                                "aggregation": "COUNT"
+                            },
+                            {
+                                "name": "Failed Login Rate",
+                                "field": "failed_login_rate",
+                                "aggregation": "AVG"
+                            },
+                            {
+                                "name": "External IP Rate",
+                                "field": "external_ip_rate",
+                                "aggregation": "AVG"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "Line Chart",
+                        "title": "Security Risk Trends",
+                        "xAxis": "activity_date",
+                        "yAxis": "security_risk_score",
+                        "groupBy": "security_risk_level"
+                    }
+                ]
+            },
+            {
+                "name": "Customer Risk Profiles",
+                "visuals": [
+                    {
+                        "type": "Pie Chart",
+                        "title": "Customer Risk Distribution",
+                        "field": "overall_risk_level",
+                        "aggregation": "COUNT"
+                    },
+                    {
+                        "type": "Bar Chart",
+                        "title": "Risk by Customer Tier",
+                        "xAxis": "risk_adjusted_tier",
+                        "yAxis": "combined_risk_score",
+                        "groupBy": "overall_risk_level"
+                    }
+                ]
+            },
+            {
+                "name": "Login Activity Analysis",
+                "visuals": [
+                    {
+                        "type": "Heat Map",
+                        "title": "Login Attempts by Hour",
+                        "xAxis": "hour_of_day",
+                        "yAxis": "day_of_week",
+                        "value": "total_login_attempts"
+                    },
+                    {
+                        "type": "Bar Chart",
+                        "title": "Failed Login Attempts",
+                        "xAxis": "customer_id",
+                        "yAxis": "failed_login_attempts",
+                        "sortBy": "failed_login_attempts",
+                        "limit": 10
+                    }
+                ]
+            },
+            {
+                "name": "Geographic Analysis",
+                "visuals": [
+                    {
+                        "type": "Map",
+                        "title": "Login Locations",
+                        "location": "location_city",
+                        "value": "total_login_attempts",
+                        "colorBy": "is_foreign_location"
+                    },
+                    {
+                        "type": "Bar Chart",
+                        "title": "Foreign Login Attempts",
+                        "xAxis": "location_country",
+                        "yAxis": "foreign_location_logins",
+                        "sortBy": "foreign_location_logins",
+                        "limit": 10
+                    }
+                ]
+            }
+        ],
+        "filters": [
+            {
+                "name": "Date Range",
+                "field": "activity_date",
+                "type": "date_range"
+            },
+            {
+                "name": "Risk Level",
+                "field": "security_risk_level",
+                "type": "multi_select"
+            },
+            {
+                "name": "Customer Tier",
+                "field": "risk_adjusted_tier",
+                "type": "multi_select"
+            }
+        ]
+    }
+} 

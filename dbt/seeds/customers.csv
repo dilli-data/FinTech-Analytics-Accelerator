@@ -1,0 +1,11 @@
+customer_id,first_name,last_name,email,phone,address,city,state,zip_code,country,income_level,occupation,account_created_date,kyc_status,risk_level
+CUST001,John,Smith,john.smith@email.com,+1-555-0101,123 Main St,New York,NY,10001,USA,high,Software Engineer,2024-01-15,verified,low
+CUST002,Jane,Doe,jane.doe@email.com,+1-555-0102,456 Park Ave,Los Angeles,CA,90001,USA,medium,Marketing Manager,2024-01-20,verified,low
+CUST003,Robert,Johnson,robert.j@email.com,+1-555-0103,789 Oak St,Chicago,IL,60601,USA,high,Financial Analyst,2024-02-01,pending,medium
+CUST004,Maria,Garcia,maria.g@email.com,+1-555-0104,321 Pine Rd,Miami,FL,33101,USA,low,Teacher,2024-02-10,verified,low
+CUST005,David,Lee,david.lee@email.com,+1-555-0105,654 Maple Dr,Seattle,WA,98101,USA,high,Doctor,2024-02-15,verified,low
+CUST006,Sarah,Wilson,sarah.w@email.com,+1-555-0106,987 Cedar Ln,Boston,MA,02108,USA,medium,Consultant,2024-02-20,pending,medium
+CUST007,Michael,Brown,michael.b@email.com,+1-555-0107,147 Elm St,Denver,CO,80201,USA,high,Architect,2024-03-01,verified,low
+CUST008,Lisa,Anderson,lisa.a@email.com,+1-555-0108,258 Birch Ave,Portland,OR,97201,USA,medium,Designer,2024-03-05,verified,low
+CUST009,James,Taylor,james.t@email.com,+1-555-0109,369 Spruce Rd,Austin,TX,78701,USA,high,Engineer,2024-03-10,pending,medium
+CUST010,Emma,Martinez,emma.m@email.com,+1-555-0110,741 Walnut Dr,San Francisco,CA,94101,USA,high,Product Manager,2024-03-15,verified,low 

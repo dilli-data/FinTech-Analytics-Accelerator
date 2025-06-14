@@ -1,0 +1,11 @@
+score_id,customer_id,score_date,credit_score,score_change,payment_history,credit_utilization,credit_age,recent_inquiries,debt_to_income,risk_factors
+SCR001,CUST001,2024-03-01,750,15,excellent,0.25,5.2,1,0.18,low
+SCR002,CUST002,2024-03-01,720,-5,good,0.35,3.8,2,0.25,low
+SCR003,CUST003,2024-03-01,680,-20,fair,0.45,2.5,3,0.35,medium
+SCR004,CUST004,2024-03-01,650,-10,fair,0.50,1.8,2,0.40,medium
+SCR005,CUST005,2024-03-01,780,25,excellent,0.20,7.5,0,0.15,low
+SCR006,CUST006,2024-03-01,710,0,good,0.30,4.2,1,0.22,low
+SCR007,CUST007,2024-03-01,690,-15,fair,0.40,3.0,2,0.30,medium
+SCR008,CUST008,2024-03-01,730,10,good,0.28,4.5,1,0.20,low
+SCR009,CUST009,2024-03-01,670,-25,poor,0.55,2.0,4,0.45,high
+SCR010,CUST010,2024-03-01,760,20,excellent,0.22,6.0,1,0.17,low 

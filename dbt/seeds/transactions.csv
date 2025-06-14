@@ -1,0 +1,11 @@
+transaction_id,customer_id,account_id,transaction_type,amount,currency,merchant_name,merchant_category,transaction_date,device_id,ip_address,status,is_fraudulent
+TXN001,CUST001,ACC001,purchase,150.00,USD,Amazon,retail,2024-03-01 10:15:00,DEV001,192.168.1.1,completed,false
+TXN002,CUST002,ACC002,purchase,75.50,USD,Starbucks,food,2024-03-01 11:30:00,DEV002,192.168.1.2,completed,false
+TXN003,CUST003,ACC003,transfer,1000.00,USD,Internal Transfer,banking,2024-03-01 12:45:00,DEV003,192.168.1.3,completed,false
+TXN004,CUST001,ACC001,purchase,2500.00,USD,Best Buy,electronics,2024-03-01 14:20:00,DEV004,192.168.1.4,completed,true
+TXN005,CUST004,ACC004,purchase,45.00,USD,CVS Pharmacy,healthcare,2024-03-01 15:10:00,DEV005,192.168.1.5,completed,false
+TXN006,CUST005,ACC005,withdrawal,500.00,USD,ATM,banking,2024-03-01 16:30:00,DEV006,192.168.1.6,completed,false
+TXN007,CUST002,ACC002,purchase,1200.00,USD,Apple Store,electronics,2024-03-01 17:45:00,DEV007,192.168.1.7,completed,false
+TXN008,CUST006,ACC006,transfer,2000.00,USD,Internal Transfer,banking,2024-03-01 18:20:00,DEV008,192.168.1.8,completed,true
+TXN009,CUST007,ACC007,purchase,85.00,USD,Whole Foods,grocery,2024-03-01 19:15:00,DEV009,192.168.1.9,completed,false
+TXN010,CUST008,ACC008,purchase,3000.00,USD,Travel Agency,travel,2024-03-01 20:30:00,DEV010,192.168.1.10,completed,true 
