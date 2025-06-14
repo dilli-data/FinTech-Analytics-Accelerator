@@ -1,0 +1,35 @@
+version: 2
+
+sources:
+  - name: raw
+    database: "{{ env_var('REDSHIFT_DATABASE') }}"
+    schema: raw
+    tables:
+      - name: customers
+        description: Raw customer data from core banking system
+        columns:
+          - name: customer_id
+            description: Unique identifier for the customer
+            tests:
+              - unique
+              - not_null
+          - name: email
+            description: Customer's email address
+            tests:
+              - not_null
+              
+      - name: transactions
+        description: Raw transaction data from banking system
+        columns:
+          - name: transaction_id
+            description: Unique identifier for the transaction
+            tests:
+              - unique
+              - not_null
+          - name: customer_id
+            description: Foreign key to customers table
+            tests:
+              - not_null
+              - relationships:
+                  to: source('raw', 'customers')
+                  field: customer_id 

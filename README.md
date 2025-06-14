@@ -135,32 +135,116 @@ For detailed architecture documentation, see [Architecture.md](docs/architecture
 
 ## 🚀 Getting Started
 
-1. **Prerequisites**
+### Prerequisites
+
+1. **Required Software**
    - Python 3.8+
+   - Git
+   - AWS CLI configured with appropriate credentials
    - dbt CLI
-   - Amazon Redshift cluster
+   - Access to an Amazon Redshift cluster
    - Amazon QuickSight account
 
-2. **Setup**
+2. **AWS Resources Required**
+   - Amazon Redshift cluster
+   - Amazon S3 bucket
+   - AWS Glue ETL jobs
+   - Amazon QuickSight subscription
+   - Appropriate IAM roles and permissions
+
+### Detailed Setup Instructions
+
+1. **Clone and Setup Project**
    ```bash
    # Clone the repository
    git clone [repository-url]
+   cd fintech-analytics-accelerator
+   
+   # Create and activate virtual environment
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
    
    # Install dependencies
    pip install -r requirements.txt
-   
-   # Configure dbt
-   dbt deps
-   dbt seed
-   dbt run
    ```
 
-3. **Development**
+2. **Configure Environment Variables**
+   ```bash
+   # Copy the template file
+   cp .env.template .env
+   
+   # Edit .env with your configuration
+   # Required variables:
+   # - REDSHIFT_HOST
+   # - REDSHIFT_USER
+   # - REDSHIFT_PASSWORD
+   # - REDSHIFT_DATABASE
+   # - AWS_PROFILE
+   # - AWS_REGION
+   ```
+
+3. **Setup dbt**
+   ```bash
+   # Install dbt dependencies
+   cd dbt
+   dbt deps
+   
+   # Run initial models
+   dbt seed  # Load seed data
+   dbt run   # Run all models
+   dbt test  # Run tests
+   ```
+
+4. **AWS Setup**
+   - Create an S3 bucket for data landing
+   - Set up AWS Glue ETL jobs
+   - Configure Redshift cluster
+   - Set up QuickSight
+
+5. **Project Structure**
+   ```
+   fintech-analytics-accelerator/
+   ├── dbt/
+   │   ├── models/
+   │   │   ├── staging/
+   │   │   ├── intermediate/
+   │   │   └── marts/
+   │   ├── tests/
+   │   ├── macros/
+   │   ├── seeds/
+   │   └── snapshots/
+   ├── docs/
+   ├── quicksight_assets/
+   ├── requirements.txt
+   ├── .env.template
+   └── README.md
+   ```
+
+6. **Development Workflow**
    - Create new models in `dbt/models/`
    - Add tests in `dbt/tests/`
    - Update documentation in `docs/`
+   - Use `dbt run` to test changes
+   - Use `dbt test` to validate data quality
 
-## 📈 Analytics Dashboards
+### Common Issues and Solutions
+
+1. **dbt Connection Issues**
+   - Verify Redshift credentials in `.env`
+   - Check network connectivity to Redshift
+   - Ensure IAM roles are properly configured
+
+2. **AWS Authentication**
+   - Verify AWS CLI configuration
+   - Check IAM permissions
+   - Ensure AWS_PROFILE is set correctly
+
+3. **Data Pipeline Issues**
+   - Check Glue job logs
+   - Verify S3 bucket permissions
+   - Monitor Redshift query performance
+
+## 📊 Analytics Dashboards
 
 1. **Fraud Detection Dashboard**
    - Suspicious transaction patterns
@@ -190,3 +274,14 @@ For detailed architecture documentation, see [Architecture.md](docs/architecture
 - Efficient dbt models
 - Cached QuickSight datasets
 - Automated maintenance
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
+
+## 📝 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.

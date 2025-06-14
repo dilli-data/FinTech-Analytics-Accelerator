@@ -18,20 +18,15 @@ clean-targets:
 
 models:
   fintech_analytics:
+    materialized: table
     staging:
       +materialized: view
-      +schema: staging
     marts:
       +materialized: table
-      +schema: marts
-      fraud_detection:
-        +materialized: table
-        +schema: fraud_detection
-      revenue_analysis:
-        +materialized: table
-        +schema: revenue_analysis
+    intermediate:
+      +materialized: view
 
 vars:
   # Add any project-level variables here
-  start_date: '2024-01-01'
+  start_date: '2023-01-01'
   end_date: '2024-12-31' 

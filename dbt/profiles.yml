@@ -1,0 +1,26 @@
+fintech_analytics:
+  target: dev
+  outputs:
+    dev:
+      type: redshift
+      host: "{{ env_var('REDSHIFT_HOST') }}"
+      port: 5439
+      user: "{{ env_var('REDSHIFT_USER') }}"
+      password: "{{ env_var('REDSHIFT_PASSWORD') }}"
+      dbname: "{{ env_var('REDSHIFT_DATABASE') }}"
+      schema: "{{ env_var('REDSHIFT_SCHEMA', 'public') }}"
+      threads: 4
+      iam_profile: "{{ env_var('AWS_PROFILE', 'default') }}"
+      region: "{{ env_var('AWS_REGION', 'us-east-1') }}"
+      
+    prod:
+      type: redshift
+      host: "{{ env_var('REDSHIFT_HOST') }}"
+      port: 5439
+      user: "{{ env_var('REDSHIFT_USER') }}"
+      password: "{{ env_var('REDSHIFT_PASSWORD') }}"
+      dbname: "{{ env_var('REDSHIFT_DATABASE') }}"
+      schema: "{{ env_var('REDSHIFT_SCHEMA', 'public') }}"
+      threads: 8
+      iam_profile: "{{ env_var('AWS_PROFILE', 'default') }}"
+      region: "{{ env_var('AWS_REGION', 'us-east-1') }}" 
